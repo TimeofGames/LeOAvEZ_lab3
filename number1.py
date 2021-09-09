@@ -127,10 +127,10 @@ class Graph():
     def convert_to_list(self):
         dictionary = dict()
         for node in self._nodes:
-            connects = ()
+            connects = []
             for i in range(len(node.connects)):
-                connects = (node.connects.get(i)) + connects
-            dictionary.update([node.index,connects])
+                connects.append(node.connects.get(i))
+            dictionary.update([(node.index,tuple(connects))])
         return dictionary
 
 
