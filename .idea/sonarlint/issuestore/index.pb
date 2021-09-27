@@ -1,3 +1,19 @@
 
+D
+Exceptions_Matrix.py,5\2\52db16798003f15fa562d779ee75c0f1d3d41557
+B
+Exceptions_Node.py,0\f\0f8d88c8f64d781b201509cc0f74ca29244202cd
+B
+Exceptions_list.py,4\8\48f7c7ca6c98f8b74eaf6cdd8aba810bb25cfc8a
 7
-test.py,a\3\a36e355ddb203d7d4133221f339dc406cb9f480f
+Node.py,7\8\78967d6853580d62a44ad561bc113f1413994c4e
+C
+Exceptions_Graph.py,6\f\6f075a9cb4bc69e4ff79f2ae03c21c547ada1ddd
+@
+AdjacencyList.py,2\7\278ca42c90de64a29e31c3b707d10d654d28a919
+7
+main.py,f\1\f1bdda93d9a278e358509d498e17d97764c1fb29
+9
+	Matrix.py,9\9\99162d0d9fddd1c4b849d7da4949d677c09f4226
+8
+Graph.py,5\f\5f2ff3d7edf1dc2c46fd0e5c7ed2dd37a8175792

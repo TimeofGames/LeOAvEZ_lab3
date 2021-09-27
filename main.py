@@ -1,15 +1,14 @@
 from Graph import Graph
 
 graph = Graph(name='V')
+graph2 = Graph(name='X')
 
 for i in range(5):
     graph.add_node(i)
+    graph2.add_node(i)
 
-graph.connect(2, 3)
-graph.connect(1, 2)
-graph.connect(3, 4)
-graph.print()
+graph.connect_dir(1, 2)
+graph.connect_dir(2, 1)
 
-graph.node_duplication(2)
-
-graph.print()
+graph3 = graph.annular_sum(graph2)
+graph3.print()

@@ -31,6 +31,10 @@ class Node():
     def index(self, new_index):
         self._index = new_index
 
+    def node_update(self, node):
+        self._name = self._name + node.name
+        return self._index
+
     def __eq__(self, other):
         if isinstance(other, Node):
             return self._equal(other.data)
@@ -47,6 +51,4 @@ class Node():
             return False
 
     def __hash__(self):
-        return hash(self.name)
-
-
+        return hash(self.data)

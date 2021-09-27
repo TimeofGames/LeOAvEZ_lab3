@@ -7,6 +7,10 @@ class AdjacencyList():
     def __init__(self):
         self._adj_list = dict()
 
+    @property
+    def adj_list(self):
+        return self._adj_list
+
     def add_node(self, node):
         self._adj_list[node] = list()
 

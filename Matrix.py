@@ -10,6 +10,14 @@ class Matrix():
         self._nodes = []
         self._matrix = []
 
+    @property
+    def nodes(self):
+        return self._nodes
+
+    @property
+    def matrix(self):
+        return self._matrix
+
     def add_node(self, node):
         self._nodes.append(node)
         self._matrix_update(1)
@@ -45,12 +53,7 @@ class Matrix():
         for i in self._nodes:
             adj_list.add_node(i)
         for i in range(len(self._matrix)):
-            for j in range(i, len(self._matrix[i])):
-                for k in self._matrix[i][j]:
-                    adj_list.connect_dir(self._nodes[i], self._nodes[j], k)
-
-        for i in range(len(self._matrix)):
-            for j in range(0, i):
+            for j in range(len(self._matrix[i])):
                 for k in self._matrix[i][j]:
                     adj_list.connect_dir(self._nodes[i], self._nodes[j], k)
         return adj_list
@@ -81,3 +84,40 @@ class Matrix():
         for i in range(len(self._matrix)):
             for j in self._matrix[i][from_node.index]:
                 self.connect_dir(node, self._nodes[i], j)
+
+    def plus(self, first_matrix, second_matrix, links):
+        for i in range(len(first_matrix.matrix)):
+            for j in range(len(first_matrix.matrix[i])):
+                for k in first_matrix.matrix[i][j]:
+                    self.connect_dir(self._nodes[links[first_matrix.nodes[i]]],
+                                     self._nodes[links[first_matrix.nodes[j]]], k)
+
+        for i in range(len(second_matrix.matrix)):
+            for j in range(len(second_matrix.matrix[i])):
+                for k in second_matrix.matrix[i][j]:
+                    self.connect_dir(self.nodes[links[second_matrix.nodes[i]]],
+                                     self._nodes[links[second_matrix.nodes[j]]], k)
+
+    def matrix_crossing(self, first_matrix, second_matrix, links):
+        for i in range(len(self._matrix)):
+            for j in range(len(self._matrix[i])):
+                first_array = first_matrix.matrix[links[i]][links[j]]
+                second_array = second_matrix.matrix[links[i]][links[j]]
+                for k in first_array:
+                    for g in second_array:
+                        if k == g:
+                            self.connect_dir(self._nodes[i], self._nodes[j], k)
+
+    def annular_sum(self, first_matrix, second_matrix, links):
+        for i in range(len(self._matrix)):
+            for j in range(len(self._matrix[i])):
+                first_array = first_matrix.matrix[links[i]][links[j]]
+                second_array = second_matrix.matrix[links[i]][links[j]]
+                for k in first_array:
+                    if k not in [g for g in second_array]:
+                        self.connect_dir(self._nodes[i], self._nodes[j], k)
+                for k in second_array:
+                    if k not in [g for g in first_array]:
+                        self.connect_dir(self._nodes[i], self._nodes[j], k)
+
+
