@@ -5,8 +5,6 @@ import AdjacencyList
 
 class Matrix():
     def __init__(self):
-        self._row = 0
-        self._col = 0
         self._nodes = []
         self._matrix = []
 
@@ -77,13 +75,12 @@ class Matrix():
             raise Exceptions_Graph.RibNotIncludedError
 
     def node_duplication(self, from_node, node):
-        self.add_node(node)
         for i in range(len(self._matrix[from_node.index])):
             for j in self._matrix[from_node.index][i]:
                 self.connect_dir(node, self._nodes[i], j)
         for i in range(len(self._matrix)):
             for j in self._matrix[i][from_node.index]:
-                self.connect_dir(node, self._nodes[i], j)
+                self.connect_dir(self._nodes[i], node, j)
 
     def plus(self, first_matrix, second_matrix, links):
         for i in range(len(first_matrix.matrix)):
@@ -101,8 +98,8 @@ class Matrix():
     def matrix_crossing(self, first_matrix, second_matrix, links):
         for i in range(len(self._matrix)):
             for j in range(len(self._matrix[i])):
-                first_array = first_matrix.matrix[links[i]][links[j]]
-                second_array = second_matrix.matrix[links[i]][links[j]]
+                first_array = first_matrix.matrix[links[i].index][links[j].index]
+                second_array = second_matrix.matrix[links[i].index][links[j].index]
                 for k in first_array:
                     for g in second_array:
                         if k == g:
@@ -111,8 +108,8 @@ class Matrix():
     def annular_sum(self, first_matrix, second_matrix, links):
         for i in range(len(self._matrix)):
             for j in range(len(self._matrix[i])):
-                first_array = first_matrix.matrix[links[i]][links[j]]
-                second_array = second_matrix.matrix[links[i]][links[j]]
+                first_array = first_matrix.matrix[links[i].index][links[j].index]
+                second_array = second_matrix.matrix[links[i].index][links[j].index]
                 for k in first_array:
                     if k not in [g for g in second_array]:
                         self.connect_dir(self._nodes[i], self._nodes[j], k)
@@ -120,4 +117,25 @@ class Matrix():
                     if k not in [g for g in first_array]:
                         self.connect_dir(self._nodes[i], self._nodes[j], k)
 
+    def cartesian_product(self, first_matrix, second_matrix, links):
+        for i in range(len(self._matrix)):
+            for j in range(len(self._matrix[i])):
+                if links[i][0] == links[j][0] and len(second_matrix.matrix[links[i][1].index][links[j][1].index]) > 0:
+                    self._matrix[i][j] = (second_matrix.matrix[links[i][1].index][links[j][1].index])
+                elif links[i][1] == links[j][1] and len(first_matrix.matrix[links[i][0].index][links[j][0].index]) > 0:
+                    self._matrix[i][j] = (first_matrix.matrix[links[i][0].index][links[j][0].index])
 
+    def dfs(self, node):
+        return self._dfs_real(node)
+
+    def _dfs_real(self, node):
+        visits = []
+        stack = [node.index]
+        while len(stack) > 0:
+            item = stack.pop()
+            if item not in visits:
+                visits.append(item)
+                for i in range(len(self._matrix[item]) - 1, 0, -1):
+                    if len(self._matrix[item][i]) > 0:
+                        stack.append(i)
+        return visits

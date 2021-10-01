@@ -1,14 +1,13 @@
+from random import randint
 from Graph import Graph
 
-graph = Graph(name='V')
-graph2 = Graph(name='X')
+graph1 = Graph(name='V')
 
-for i in range(5):
-    graph.add_node(i)
-    graph2.add_node(i)
+for i in range(10):
+    graph1.add_node(i)
 
-graph.connect_dir(1, 2)
-graph.connect_dir(2, 1)
+for _ in range(10):
+    graph1.connect(randint(0, 5), randint(0, 5))
 
-graph3 = graph.annular_sum(graph2)
-graph3.print()
+graph1.print()
+print(graph1.dfs(0))

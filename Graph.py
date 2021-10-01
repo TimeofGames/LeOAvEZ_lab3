@@ -4,6 +4,7 @@ import Exceptions_list
 import Node
 import Matrix
 import AdjacencyList
+from random import randint
 
 
 class Graph():
@@ -90,6 +91,7 @@ class Graph():
             self._nodes[i].index = i
 
     def print(self):
+        print('Граф =', self.name)
         print("Матрица смежности")
         self._matrix.print()
         print("Список смежности")
@@ -102,7 +104,7 @@ class Graph():
         self.connect_dir(to_node, from_node, weight)
 
     def connect_dir(self, from_node, to_node, weight=1):
-        from_node, to_node = self._node_review(from_node, to_node)
+        from_node, to_node = self._node_review(self._nodes[from_node], self._nodes[to_node])
         self._matrix.connect_dir(from_node, to_node, weight)
         self._adjacency_list.connect_dir(from_node, to_node, weight)
 
@@ -145,7 +147,7 @@ class Graph():
             if node is None:
                 raise Exceptions_Graph.NodeNotIncludedError
             else:
-                array.append(self._nodes[node])
+                array.append(node)
         return array
 
     def node_duplication(self, from_node):
@@ -155,6 +157,8 @@ class Graph():
         self._adjacency_list.node_duplication(from_node[0], self._nodes[-1])
 
     def __add__(self, other):
+        if not isinstance(other, Graph):
+            raise Exceptions_Graph.GraphError
         to_ret = Graph(name=self.name + '+' + other.name)
         links = dict()
         for i in self._nodes:
@@ -164,7 +168,7 @@ class Graph():
             if i in [j for j in to_ret.nodes]:
                 for j in to_ret.nodes:
                     if j == i:
-                        links[i] = j.node_update(i)
+                        links[i] = j.node_name_update(i)
                         break
             else:
                 links[i] = to_ret.add_node(i.data, name=i.name)
@@ -174,6 +178,8 @@ class Graph():
         return to_ret
 
     def graph_crossing(self, other):
+        if not isinstance(other, Graph):
+            raise Exceptions_Graph.GraphError
         to_ret = Graph(name=self.name + '+' + other.name)
         links = dict()
         for i in self._nodes:
@@ -182,13 +188,15 @@ class Graph():
             if i in [j for j in to_ret.nodes]:
                 for j in to_ret.nodes:
                     if j == i:
-                        links[i] = j.node_update(i)
+                        links[j.node_name_update(i)] = i
                         break
         to_ret.matrix.matrix_crossing(self.matrix, other.matrix, links)
         to_ret.adj_list = to_ret.matrix.convert_to_adj_list()
         return to_ret
 
     def annular_sum(self, other):
+        if not isinstance(other, Graph):
+            raise Exceptions_Graph.GraphError
         to_ret = Graph(name=self.name + '+' + other.name)
         links = dict()
         for i in self._nodes:
@@ -197,7 +205,7 @@ class Graph():
             if i in [j for j in to_ret.nodes]:
                 for j in to_ret.nodes:
                     if j == i:
-                        links[i] = j.node_update(i)
+                        links[j.node_name_update(i)] = i
                         break
             else:
                 links[i] = to_ret.add_node(i.data, name=i.name)
@@ -207,12 +215,32 @@ class Graph():
         i = 0
         while i < len(to_ret.matrix.matrix):
             row = [to_ret.matrix.matrix[f][i] for f in range(len(to_ret.matrix.matrix))]
-            if to_ret._matrix.matrix[i] == [[] for _ in range(len(to_ret.matrix.matrix))] and row == [[] for _ in range(len(to_ret.matrix.matrix))]:
+            if to_ret._matrix.matrix[i] == [[] for _ in range(len(to_ret.matrix.matrix))] and row == [[] for _ in range(
+                    len(to_ret.matrix.matrix))]:
                 to_ret.del_node(to_ret._nodes[i])
             else:
                 i += 1
         to_ret.adj_list = to_ret.matrix.convert_to_adj_list()
         return to_ret
 
+    def dfs(self, index):
+        to_ret = [self._matrix.dfs(self._nodes[index]), self._adjacency_list.dfs(self._nodes[index])]
+        return to_ret
+
+    def graph_rand_gen(self, long, connects):
+        for i in range(long):
+            self.add_node(i)
+        for _ in range(connects):
+            self.connect(randint(0, long - 1), randint(0, long - 1))
+
     def __mul__(self, other):
-        
+        if not isinstance(other, Graph):
+            raise Exceptions_Graph.GraphError
+        to_ret = Graph(name=self.name + '+' + other.name)
+        links = dict()
+        for node in self._nodes:
+            for node2 in other.nodes:
+                links[to_ret.add_node(node.data + node2.data, name=node.name + node2.name)] = [node, node2]
+        to_ret.matrix.cartesian_product(self._matrix, other.matrix, links)
+        to_ret._adjacency_list = to_ret._matrix.convert_to_adj_list()
+        return to_ret

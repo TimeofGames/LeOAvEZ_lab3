@@ -66,11 +66,21 @@ class AdjacencyList():
             raise Exceptions_Graph.RibNotIncludedError
 
     def node_duplication(self, from_node, node):
-        self.add_node(node)
         for i in self._adj_list.keys():
             for j in self._adj_list[i]:
                 if j[0] == from_node:
-                    self.connect_dir(j[0], node, j[1])
+                    self.connect_dir(i, node, j[1])
 
         for i in self._adj_list[from_node]:
             self.connect_dir(node, i[0], i[1])
+
+    def dfs(self, node):
+        visits = []
+        return self._dfs_real(node, visits)
+
+    def _dfs_real(self, node, visits):
+        visits.append(node.index)
+        for i in self._adj_list[node]:
+            if i[0].index not in visits:
+                self._dfs_real(i[0], visits)
+        return visits
