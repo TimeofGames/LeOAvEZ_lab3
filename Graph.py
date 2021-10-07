@@ -244,3 +244,6 @@ class Graph():
         to_ret.matrix.cartesian_product(self._matrix, other.matrix, links)
         to_ret._adjacency_list = to_ret._matrix.convert_to_adj_list()
         return to_ret
+
+    def bfs(self, node):
+        return [self._matrix.bfs(node), self._adjacency_list.bfs(node)]

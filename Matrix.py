@@ -1,6 +1,7 @@
 import Exceptions_Matrix
 import Exceptions_Graph
 import AdjacencyList
+from queue import Queue
 
 
 class Matrix():
@@ -138,4 +139,16 @@ class Matrix():
                 for i in range(len(self._matrix[item]) - 1, 0, -1):
                     if len(self._matrix[item][i]) > 0:
                         stack.append(i)
+        return visits
+
+    def bfs(self, node):
+        visits = []
+        queue = Queue()
+        queue.add(node)
+        while len(queue):
+            item = queue.pop()
+            visits.append(item.index)
+            for i in range(len(self._matrix[item.index])):
+                if len(self._matrix[item.index][i]) >= 1 and i not in visits:
+                    queue.add(self._nodes[i])
         return visits

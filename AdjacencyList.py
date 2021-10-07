@@ -1,7 +1,7 @@
 import Exceptions_list
 import Exceptions_Graph
 import Matrix
-
+from queue import Queue
 
 class AdjacencyList():
     def __init__(self):
@@ -83,4 +83,16 @@ class AdjacencyList():
         for i in self._adj_list[node]:
             if i[0].index not in visits:
                 self._dfs_real(i[0], visits)
+        return visits
+
+    def bfs(self, node):
+        visits = []
+        queue = Queue()
+        queue.add(node)
+        while len(queue):
+            item = queue.pop()
+            visits.append(item.index)
+            for i in range(len(self._adj_list[item])):
+                if self._adj_list[item][i][0].index not in visits:
+                    queue.add(self._adj_list[item][i][0])
         return visits

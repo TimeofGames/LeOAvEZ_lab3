@@ -1,13 +1,16 @@
 from random import randint
 from Graph import Graph
 
-graph1 = Graph(name='V')
+graph = Graph(name="v")
 
-for i in range(10):
-    graph1.add_node(i)
+for i in range(5):
+    graph.add_node(i)
 
-for _ in range(10):
-    graph1.connect(randint(0, 5), randint(0, 5))
+graph.connect(0,1)
 
-graph1.print()
-print(graph1.dfs(0))
+graph.connect(2,1)
+graph.connect(3,1)
+graph.connect(4,0)
+
+graph.print()
+print(graph.bfs(graph.nodes[0]))
